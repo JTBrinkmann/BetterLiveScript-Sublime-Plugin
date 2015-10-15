@@ -3,59 +3,128 @@
 <plist version="1.0">
 <dict>
 	<key>comment</key>
-	<string>CoffeeScript Syntax: version 1</string>
+	<string>Better LiveScript Syntax: version 1</string>
 	<key>fileTypes</key>
 	<array>
-		<string>coffee</string>
-		<string>Cakefile</string>
-		<string>coffee.erb</string>
-		<string>cson</string>
+		<string>ls</string>
+		<string>livescript</string>
 	</array>
 	<key>firstLineMatch</key>
-	<string>^#!.*\bcoffee</string>
+	<string>^#!.*\bls</string>
 	<key>foldingStartMarker</key>
-	<string>^\s*class\s+\S.*$|.*(-&gt;|=&gt;)\s*$|.*[\[{]\s*$</string>
+	<string>^\s*class\s+\S.*$|.*(?:!?(?:--?|~~?)&gt;|&lt;(?:--?|~~?)!?)\s*$|.*[\[{]\s*$</string>
 	<key>foldingStopMarker</key>
 	<string>^\s*$|^\s*[}\]]\s*$</string>
 	<key>keyEquivalent</key>
-	<string>^~C</string>
+	<string>^~L</string>
 	<key>name</key>
-	<string>CoffeeScript</string>
+	<string>LiveScript</string>
 	<key>patterns</key>
 	<array>
-		<dict>
+		<dict> <!-- include #comments -->
+			<key>include</key>
+			<string>#comments</string>
+		</dict>
+		<dict> <!-- Function -->
+			<key>match</key>
+			<string>(?x)
+				\s*
+				(?:
+					(?:
+						([a-zA-Z\$_@][\w\$:\.]*?)\s*	(?# 1. entity.name.function.livescript)
+						(\:|:?=)\s*						(?# 2. keyword.operator.livescript)
+					)?
+					(?:
+						([a-zA-Z\$_][\w\$_]*)?\s*		(?# 3. entity.name.function.livescript)
+						(\((?:							(?# 4. variable.parameter.function.livescript)
+							(\/\*.*?\*\/)				(?# 5. comment.block.livescript)
+						|
+							[^\(\)]
+						)*\))?\s*
+						(!?(?:--?|~~?)&gt;)\s*			(?# 6. keyword.operator.livescript)
+					|
+						(\(.*?\))?\s*					(?# 7. variable.parameter.function.livescript)
+						(&lt;-+!?)\s*					(?# 8. keyword.operator.livescript)
+					)
+				|
+					(function)\s+						(?#  9. keyword.operator.livescript)
+					([a-zA-Z\$_][\w\$_]*)\s*			(?# 10. entity.name.function.livescript)
+					(.*)?								(?# 11. variable.parameter.function.livescript)
+				)
+			</string>
 			<key>captures</key>
 			<dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>variable.parameter.function.coffee</string>
+					<string>entity.name.function.livescript</string>
 				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>storage.type.function.coffee</string>
+					<string>keyword.operator.livescript</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.function.livescript</string>
+				</dict>
+				<key>4</key>
+				<dict>
+					<key>name</key>
+					<string>variable.parameter.function.livescript</string>
+				</dict>
+				<key>5</key>
+				<dict>
+					<key>name</key>
+					<string>comment.block.livescript</string>
+				</dict>
+				<key>6</key>
+				<dict>
+					<key>name</key>
+					<string>storage.type.function.livescript</string>
+				</dict>
+				<key>7</key>
+				<dict>
+					<key>name</key>
+					<string>variable.parameter.function.livescript</string>
+				</dict>
+				<key>8</key>
+				<dict>
+					<key>name</key>
+					<string>storage.type.function.livescript</string>
+				</dict>
+				<key>9</key>
+				<dict>
+					<key>name</key>
+					<string>storage.type.function.livescript</string>
+				</dict>
+				<key>10</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.function.livescript</string>
+				</dict>
+				<key>11</key>
+				<dict>
+					<key>name</key>
+					<string>variable.parameter.function.livescript</string>
 				</dict>
 			</dict>
-			<key>comment</key>
-			<string>match stuff like: a -&gt; … </string>
-			<key>match</key>
-			<string>(\([^()]*?\))\s*([=-]&gt;)</string>
 			<key>name</key>
-			<string>meta.inline.function.coffee</string>
+			<string>meta.function.livescript</string>
 		</dict>
-		<dict>
+		<dict> <!-- constructor (```new Thing```) -->
 			<key>captures</key>
 			<dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.operator.new.coffee</string>
+					<string>keyword.operator.new.livescript</string>
 				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>support.class.coffee</string>
+					<string>support.class.livescript</string>
 				</dict>
 			</dict>
 			<key>match</key>
@@ -63,232 +132,319 @@
 			<key>name</key>
 			<string>meta.class.instance.constructor</string>
 		</dict>
-		<dict>
-			<key>begin</key>
-			<string>'''</string>
-			<key>beginCaptures</key>
-			<dict>
-				<key>0</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.definition.string.begin.coffee</string>
-				</dict>
-			</dict>
-			<key>end</key>
-			<string>'''</string>
-			<key>endCaptures</key>
-			<dict>
-				<key>0</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.definition.string.end.coffee</string>
-				</dict>
-			</dict>
-			<key>name</key>
-			<string>string.quoted.heredoc.coffee</string>
-		</dict>
-		<dict>
-			<key>begin</key>
-			<string>"""</string>
-			<key>beginCaptures</key>
-			<dict>
-				<key>0</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.definition.string.begin.coffee</string>
-				</dict>
-			</dict>
-			<key>end</key>
-			<string>"""</string>
-			<key>endCaptures</key>
-			<dict>
-				<key>0</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.definition.string.end.coffee</string>
-				</dict>
-			</dict>
-			<key>name</key>
-			<string>string.quoted.double.heredoc.coffee</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>match</key>
-					<string>\\.</string>
-					<key>name</key>
-					<string>constant.character.escape.coffee</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#interpolated_coffee</string>
-				</dict>
-			</array>
-		</dict>
-		<dict>
-			<key>begin</key>
-			<string>`</string>
-			<key>beginCaptures</key>
-			<dict>
-				<key>0</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.definition.string.begin.coffee</string>
-				</dict>
-			</dict>
-			<key>end</key>
-			<string>`</string>
-			<key>endCaptures</key>
-			<dict>
-				<key>0</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.definition.string.end.coffee</string>
-				</dict>
-			</dict>
-			<key>name</key>
-			<string>string.quoted.script.coffee</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>match</key>
-					<string>\\(x\h{2}|[0-2][0-7]{,2}|3[0-6][0-7]|37[0-7]?|[4-7][0-7]?|.)</string>
-					<key>name</key>
-					<string>constant.character.escape.coffee</string>
-				</dict>
-			</array>
-		</dict>
-		<dict>
-			<key>begin</key>
-			<string>(?&lt;!#)###(?!#)</string>
-			<key>captures</key>
-			<dict>
-				<key>0</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.definition.comment.coffee</string>
-				</dict>
-			</dict>
-			<key>end</key>
-			<string>###(?:[ \t]*\n)</string>
-			<key>name</key>
-			<string>comment.block.coffee</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>match</key>
-					<string>@\w*</string>
-					<key>name</key>
-					<string>storage.type.annotation.coffeescript</string>
-				</dict>
-			</array>
-		</dict>
-		<dict>
+		<dict> <!-- \backslashKeywordString -->
 			<key>captures</key>
 			<dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.definition.comment.coffee</string>
+					<string>punctuation.definition.string.begin.livescript</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>string.bstoken.livescript</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<!--<string>(\\)(\S+)</string>-->
+			<string>(\\)(\S[^\s,;\)}\]]*)</string>
+		</dict>
+		<dict> <!-- '''HereDoc''' -->
+			<key>begin</key>
+			<string>'''</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.livescript</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>'''</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.livescript</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>string.quoted.heredoc.livescript</string>
+		</dict>
+		<dict> <!-- """HereDoc""" -->
+			<key>begin</key>
+			<string>"""</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.livescript</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>"""</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.livescript</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>string.quoted.double.heredoc.livescript</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<!--<string>\\.</string>-->
+					<string>\\(x\h{2}|u\d{4}|[0-2][0-7]{,2}|3[0-6][0-7]|37[0-7]?|[4-7][0-7]?|.)</string>
+					<key>name</key>
+					<string>constant.character.escape.livescript</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#interpolated_livescript</string>
+				</dict>
+			</array>
+		</dict>
+		<dict> <!-- ``interpolated-javascript`` -->
+			<key>begin</key>
+			<string>``</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.interpolated-javascript.begin.livescript</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>``</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.interpolated-javascript.end.livescript</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>source.js.embedded.livescript</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>\\(x\h{2}|u\d{4}|[0-2][0-7]{,2}|3[0-6][0-7]|37[0-7]?|[4-7][0-7]?|.)</string>
+					<key>name</key>
+					<string>constant.character.escape.livescript</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>source.js</string>
+				</dict>
+			</array>
+		</dict>
+		<dict> <!-- infix operator -->
+			<key>begin</key>
+			<string>`</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.operator.begin.livescript</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>`</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.operator.end.livescript</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>keyword.operator.infix.livescript</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>\\(x\h{2}|u\d{4}|[0-2][0-7]{,2}|3[0-6][0-7]|37[0-7]?|[4-7][0-7]?|.)</string>
+					<key>name</key>
+					<string>constant.character.escape.livescript</string>
+				</dict>
+			</array>
+		</dict>
+		<dict> <!-- Word List -->
+			<key>begin</key>
+			<string>&lt;\[</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.list.begin.livescript</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>\]&gt;</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.list.end.livescript</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>string.quoted.list.livescript</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<!--<string>\\.</string>-->
+					<string>\\(x\h{2}|u\d{4}|[0-2][0-7]{,2}|3[0-6][0-7]|37[0-7]?|[4-7][0-7]?|.)</string>
+					<key>name</key>
+					<string>constant.character.escape.livescript</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#interpolated_livescript</string>
+				</dict>
+			</array>
+		</dict>
+		<dict> <!-- # line comment -->
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.comment.livescript</string>
 				</dict>
 			</dict>
 			<key>match</key>
 			<string>(#)(?!\{).*$\n?</string>
 			<key>name</key>
-			<string>comment.line.number-sign.coffee</string>
+			<string>comment.line.number-sign.livescript</string>
 		</dict>
-		<dict>
+		<dict> <!-- // multiline regex // -->
 			<key>begin</key>
-			<string>/{3}</string>
+			<string>//</string>
 			<key>end</key>
-			<string>/{3}[imgy]{0,4}</string>
+			<string>//[imgy]{0,4}</string>
 			<key>name</key>
-			<string>string.regexp.coffee</string>
+			<string>string.regexp.livescript</string>
 			<key>patterns</key>
 			<array>
 				<dict>
 					<key>include</key>
-					<string>#interpolated_coffee</string>
+					<string>#interpolated_livescript</string>
 				</dict>
 				<dict>
 					<key>include</key>
 					<string>#embedded_comment</string>
 				</dict>
+				<dict>
+					<key>include</key>
+					<string>#comments</string>
+				</dict>
 			</array>
 		</dict>
-		<dict>
+		<dict> <!-- /regex/g -->
 			<key>match</key>
 			<string>/(?![\s=/*+{}?]).*?[^\\]/[igmy]{0,4}(?![a-zA-Z0-9])</string>
 			<key>name</key>
-			<string>string.regexp.coffee</string>
+			<string>string.regexp.livescript</string>
 		</dict>
-		<dict>
+		<dict> <!-- control keywords -->
 			<key>match</key>
 			<string>(?x)
 				\b(?&lt;![\.\$])(
-					break|by|catch|continue|else|finally|for|in|of|if|return|switch|
-					then|throw|try|unless|when|while|until|loop|do|(?&lt;=for)\s+own
+					break|by|catch|continue|else|finally|for|in|of|if|return|var|switch|fallthrough|
+					then|throw|try|unless|when|while|until|loop|do|from|to|til|let|(?&lt;=for)\s+(?:let|own)
 				)(?!\s*:)\b
 			</string>
 			<key>name</key>
-			<string>keyword.control.coffee</string>
+			<string>keyword.control.livescript</string>
 		</dict>
-		<dict>
+		<dict> <!-- operator keywords -->
 			<key>match</key>
 			<string>(?x)
-				and=|or=|!|%|&amp;|\^|\*|\/|(\-)?\-(?!&gt;)|\+\+|\+|~|==|=(?!&gt;)|!=|&lt;=|&gt;=|&lt;&lt;=|&gt;&gt;=|
-				&gt;&gt;&gt;=|&lt;&gt;|&lt;|&gt;|!|&amp;&amp;|\.\.(\.)?|\?|\||\|\||\:|\*=|(?&lt;!\()/=|%=|\+=|\-=|&amp;=|
-				\^=|\b(?&lt;![\.\$])(instanceof|new|delete|typeof|and|or|is|isnt|not|super)\b
+				and=|or=|!|%%|%|&amp;|\^|\*\*|\*|\/|(\-)?\-(?!&gt;)|\+\+|\+|~=|\:=|~|==|=(?!&gt;)|!=|&lt;=|&gt;=|&lt;&lt;=|&gt;&gt;=|
+				&gt;&gt;&gt;=|&lt;&gt;|&lt;&lt;&lt;&lt;|&lt;&lt;&lt;|&lt;|&gt;|!|&amp;&amp;|\.\.(\.)?|\?|\||\|\||\:|\?=|\*=|(?&lt;!\()/=|%=|\+=|\-=|&amp;=|
+				&lt;?=|&gt;?=|%%=|\*\*=|\.=|\?=|\|\|=|\&amp;\&amp;=|\&amp;\&amp;\+=|\?\*=|\+\+=
+				\^=|\b(?&lt;![\.\$])(instanceof|new|delete|typeof|and|or|is|isnt|not|super|export|with)\b|
+				implements\b
 			</string>
 			<key>name</key>
-			<string>keyword.operator.coffee</string>
+			<string>keyword.operator.livescript</string>
 		</dict>
-		<dict>
+		<dict> <!-- assignment -->
 			<key>captures</key>
 			<dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>variable.assignment.coffee</string>
+					<string>variable.assignment.livescript</string>
 				</dict>
-				<key>4</key>
+				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.separator.key-value</string>
+					<string>keyword.operator.livescript</string>
 				</dict>
-				<key>5</key>
+				<key>3</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.operator.coffee</string>
+					<string>punctuation.separator.key-value.livescript</string>
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>([a-zA-Z\$_](\w|\$|\.)*\s*(?!\::)((:)|(=[^=]))(?!(\s*\(.*\))?\s*((=|-)&gt;)))</string>
+			<!-- 1, 4, 5
+			<string>([a-zA-Z\$_](\w|\$|\.)*\s*(?!\::)((:)|(:?=))(?!(\s*\(.*\))?\s*!?((=|-)&gt;)))</string>
+			([a-zA-Z\$_](\w|\$|\.)*\s*(?!\::)
+			((:)|(:?=))
+			(?!(\s*\(.*\))?\s*!?((=|-)&gt;)))
+			-->
+			<string>(?x)
+				([a-zA-Z\$_][\w\$\.]*\s*(?!\:\:)
+				(?:
+				((?:\+|\-|\*\*?|\?\*|\/|%%?|&lt;\?|&gt;\?|\^|\?|\|\||&amp;&amp;\+?|\:)?=)
+				|\:\~?)
+				(?!(\s*\(.*\))?\s*!?((=|-)&gt;)))
+			</string>
 			<key>name</key>
-			<string>variable.assignment.coffee</string>
+			<string>variable.assignment.livescript</string>
 		</dict>
-		<dict>
+		<dict> <!-- assignment -->
 			<key>begin</key>
-			<string>(?&lt;=\s|^)([\[\{])(?=.*?[\]\}]\s+[:=])</string>
+			<string>(?&lt;=\s|^)([\[\{])(?=.*?[\]\}]\s+:?[:=](?!=))</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>0</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.operator.coffee</string>
+					<string>keyword.operator.livescript</string>
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>([\]\}]\s*[:=])</string>
+			<string>([\]\}]\s*:?[:=])</string>
 			<key>endCaptures</key>
 			<dict>
 				<key>0</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.operator.coffee</string>
+					<string>keyword.operator.livescript</string>
 				</dict>
 			</dict>
 			<key>name</key>
-			<string>meta.variable.assignment.destructured.coffee</string>
+			<string>meta.variable.assignment.destructured.livescript</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -313,49 +469,13 @@
 				</dict>
 			</array>
 		</dict>
-		<dict>
-			<key>captures</key>
-			<dict>
-				<key>2</key>
-				<dict>
-					<key>name</key>
-					<string>entity.name.function.coffee</string>
-				</dict>
-				<key>3</key>
-				<dict>
-					<key>name</key>
-					<string>entity.name.function.coffee</string>
-				</dict>
-				<key>4</key>
-				<dict>
-					<key>name</key>
-					<string>variable.parameter.function.coffee</string>
-				</dict>
-				<key>5</key>
-				<dict>
-					<key>name</key>
-					<string>storage.type.function.coffee</string>
-				</dict>
-			</dict>
-			<key>match</key>
-			<string>(?x)
-				(\s*)
-				(?=[a-zA-Z\$_])
-				(
-					[a-zA-Z\$_](\w|\$|:|\.)*\s*
-					(?=[:=](\s*\(.*\))?\s*([=-]&gt;))
-				)
-			</string>
-			<key>name</key>
-			<string>meta.function.coffee</string>
-		</dict>
-        <dict>
+        <dict> <!-- common Express/Mocha symbols -->
             <key>comment</key>
             <string>Show well-known functions from Express and Mocha in Go To Symbol view</string>
             <key>name</key>
-            <string>meta.function.symbols.coffee</string>
+            <string>meta.function.symbols.livescript</string>
             <key>begin</key>
-            <string>^\s*(describe|it|app\.(get|post|put|all|del|delete))</string>
+            <string>^\s*(describe|it|app\.(get|post|put|all|del|delete))[^\w]</string>
             <key>end</key>
             <string>$</string>
             <key>patterns</key>
@@ -366,97 +486,93 @@
                 </dict>
             </array>
         </dict>
-		<dict>
+		<dict> <!-- positive booleans -->
 			<key>match</key>
-			<string>[=-]&gt;</string>
+			<string>\b(?&lt;!\.)(true|on|yes)(?!\s*:?[:=])\b</string>
 			<key>name</key>
-			<string>storage.type.function.coffee</string>
+			<string>constant.language.boolean.true.livescript</string>
 		</dict>
-		<dict>
+		<dict> <!-- negative booleans -->
 			<key>match</key>
-			<string>\b(?&lt;!\.)(true|on|yes)(?!\s*[:=])\b</string>
+			<string>\b(?&lt;!\.)(false|off|no)(?!\s*:?[:=])\b</string>
 			<key>name</key>
-			<string>constant.language.boolean.true.coffee</string>
+			<string>constant.language.boolean.false.livescript</string>
 		</dict>
-		<dict>
+		<dict> <!-- null -->
 			<key>match</key>
-			<string>\b(?&lt;!\.)(false|off|no)(?!\s*[:=])\b</string>
+			<string>\b(?&lt;!\.)null(?!\s*:?[:=])\b</string>
 			<key>name</key>
-			<string>constant.language.boolean.false.coffee</string>
+			<string>constant.language.null.livescript</string>
 		</dict>
-		<dict>
+		<dict> <!-- this -->
 			<key>match</key>
-			<string>\b(?&lt;!\.)null(?!\s*[:=])\b</string>
+			<string>\b(?&lt;!\.)(this|extends)(?!\s*:?[:=])\b</string>
 			<key>name</key>
-			<string>constant.language.null.coffee</string>
+			<string>variable.language.livescript</string>
 		</dict>
-		<dict>
-			<key>match</key>
-			<string>\b(?&lt;!\.)(this|extends)(?!\s*[:=])\b</string>
-			<key>name</key>
-			<string>variable.language.coffee</string>
-		</dict>
-		<dict>
+		<dict> <!-- class -->
 			<key>captures</key>
 			<dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>storage.type.class.coffee</string>
+					<string>storage.type.class.livescript</string>
 				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>entity.name.type.class.coffee</string>
+					<string>entity.name.type.class.livescript</string>
 				</dict>
 				<key>3</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.control.inheritance.coffee</string>
+					<string>keyword.control.inheritance.livescript</string>
 				</dict>
 				<key>4</key>
 				<dict>
 					<key>name</key>
-					<string>entity.other.inherited-class.coffee</string>
+					<string>entity.other.inherited-class.livescript</string>
 				</dict>
 			</dict>
 			<key>match</key>
 			<string>(class\b)\s+(@?[a-zA-Z\$_][\w\.]*)?(?:\s+(extends)\s+(@?[a-zA-Z\$\._][\w\.]*))?</string>
 			<key>name</key>
-			<string>meta.class.coffee</string>
+			<string>meta.class.livescript</string>
 		</dict>
-		<dict>
+		<dict> <!-- debugger -->
 			<key>match</key>
 			<string>\b(debugger|\\)\b</string>
 			<key>name</key>
-			<string>keyword.other.coffee</string>
+			<string>keyword.other.livescript</string>
 		</dict>
-		<dict>
+		<dict> <!-- support classes -->
 			<key>match</key>
 			<string>(?x)\b(
-				Array|ArrayBuffer|Blob|Boolean|Date|document|event|Function|
+				Array|ArrayBuffer|Blob|Boolean|Date|document
+				|event|Float(32|64)Array|Function|
 				Int(8|16|32|64)Array|Math|Map|Number|
 				Object|Proxy|RegExp|Set|String|WeakMap|
-				window|Uint(8|16|32|64)Array|XMLHttpRequest
+				window|Uint(8|16|32|64)Array|XMLHttpRequest|
+				\$|jQuery|\_
 			)\b</string>
 			<key>name</key>
-			<string>support.class.coffee</string>
+			<string>support.class.livescript</string>
 		</dict>
-		<dict>
+		<dict> <!-- console functions -->
 			<key>match</key>
 			<string>((?&lt;=console\.)(debug|warn|info|log|error|time|timeEnd|assert))\b</string>
 			<key>name</key>
-			<string>support.function.console.coffee</string>
+			<string>support.function.console.livescript</string>
 		</dict>
-		<dict>
+		<dict> <!-- support functions -->
 			<key>match</key>
 			<string>(?x)\b(
 				decodeURI(Component)?|encodeURI(Component)?|eval|parse(Float|Int)|require
 			)\b</string>
 			<key>name</key>
-			<string>support.function.coffee</string>
+			<string>support.function.livescript</string>
 		</dict>
-		<dict>
+		<dict> <!-- Array methodes -->
 			<key>match</key>
 			<string>(?x)((?&lt;=\.)(
 				apply|call|concat|every|filter|forEach|from|hasOwnProperty|indexOf|
@@ -465,17 +581,17 @@
 				unshift|valueOf
 			))\b</string>
 			<key>name</key>
-			<string>support.function.method.array.coffee</string>
+			<string>support.function.method.array.livescript</string>
 		</dict>
-		<dict>
+		<dict> <!-- isArray() -->
 			<key>match</key>
 			<string>(?x)((?&lt;=Array\.)(
 				isArray
 			))\b</string>
 			<key>name</key>
-			<string>support.function.static.array.coffee</string>
+			<string>support.function.static.array.livescript</string>
 		</dict>
-		<dict>
+		<dict> <!-- Object functions -->
 			<key>match</key>
 			<string>(?x)((?&lt;=Object\.)(
 				create|definePropert(ies|y)|freeze|getOwnProperty(Descriptors?|Names)|
@@ -483,9 +599,9 @@
 				isnt|keys|preventExtensions|seal
 			))\b</string>
 			<key>name</key>
-			<string>support.function.static.object.coffee</string>
+			<string>support.function.static.object.livescript</string>
 		</dict>
-		<dict>
+		<dict> <!-- Math functions -->
 			<key>match</key>
 			<string>(?x)((?&lt;=Math\.)(
 				abs|acos|acosh|asin|asinh|atan|atan2|atanh|ceil|cos|cosh|exp|expm1|floor|
@@ -493,71 +609,71 @@
 				tan|tanh|trunc
 			))\b</string>
 			<key>name</key>
-			<string>support.function.static.math.coffee</string>
+			<string>support.function.static.math.livescript</string>
 		</dict>
-		<dict>
+		<dict> <!-- Number test functions -->
 			<key>match</key>
 			<string>(?x)((?&lt;=Number\.)(
 				is(Finite|Integer|NaN)|toInteger
 			))\b</string>
 			<key>name</key>
-			<string>support.function.static.number.coffee</string>
+			<string>support.function.static.number.livescript</string>
 		</dict>
-		<dict>
+		<dict> <!-- Number constants -->
 			<key>match</key>
-			<string>\b(Infinity|NaN|undefined)\b</string>
+			<string>\b(Infinity|NaN|null|void)\b</string>
 			<key>name</key>
-			<string>constant.language.coffee</string>
+			<string>constant.language.livescript</string>
 		</dict>
-		<dict>
+		<dict> <!-- line terminator; -->
 			<key>match</key>
 			<string>\;</string>
 			<key>name</key>
-			<string>punctuation.terminator.statement.coffee</string>
+			<string>punctuation.terminator.statement.livescript</string>
 		</dict>
-		<dict>
+		<dict> <!-- , delimiter -->
 			<key>match</key>
 			<string>,[ |\t]*</string>
 			<key>name</key>
-			<string>meta.delimiter.object.comma.coffee</string>
+			<string>meta.delimiter.object.comma.livescript</string>
 		</dict>
-		<dict>
+		<dict> <!-- .period -->
 			<key>match</key>
 			<string>\.</string>
 			<key>name</key>
-			<string>meta.delimiter.method.period.coffee</string>
+			<string>meta.delimiter.method.period.livescript</string>
 		</dict>
-		<dict>
+		<dict> <!-- {curly braces} -->
 			<key>match</key>
 			<string>\{|\}</string>
 			<key>name</key>
-			<string>meta.brace.curly.coffee</string>
+			<string>meta.brace.curly.livescript</string>
 		</dict>
-		<dict>
+		<dict> <!-- (round braces) -->
 			<key>match</key>
 			<string>\(|\)</string>
 			<key>name</key>
-			<string>meta.brace.round.coffee</string>
+			<string>meta.brace.round.livescript</string>
 		</dict>
-		<dict>
+		<dict> <!-- [square braces] -->
 			<key>match</key>
 			<string>\[|\]\s*</string>
 			<key>name</key>
-			<string>meta.brace.square.coffee</string>
+			<string>meta.brace.square.livescript</string>
 		</dict>
-		<dict>
+		<dict> <!-- include #instance_variable -->
 			<key>include</key>
 			<string>#instance_variable</string>
 		</dict>
-		<dict>
+		<dict> <!-- include #single_quoted_string -->
 			<key>include</key>
 			<string>#single_quoted_string</string>
 		</dict>
-		<dict>
+		<dict> <!-- include #double_quoted_string -->
 			<key>include</key>
 			<string>#double_quoted_string</string>
 		</dict>
-		<dict>
+		<dict> <!-- include #numeric -->
 			<key>include</key>
 			<string>#numeric</string>
 		</dict>
@@ -576,7 +692,7 @@
 						<key>0</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.string.begin.coffee</string>
+							<string>punctuation.definition.string.begin.livescript</string>
 						</dict>
 					</dict>
 					<key>end</key>
@@ -586,22 +702,22 @@
 						<key>0</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.string.end.coffee</string>
+							<string>punctuation.definition.string.end.livescript</string>
 						</dict>
 					</dict>
 					<key>name</key>
-					<string>string.quoted.double.coffee</string>
+					<string>string.quoted.double.livescript</string>
 					<key>patterns</key>
 					<array>
 						<dict>
 							<key>match</key>
-							<string>\\(x\h{2}|[0-2][0-7]{,2}|3[0-6][0-7]|37[0-7]?|[4-7][0-7]?|.)</string>
+							<string>\\(x\h{2}|u\h{4}|[0-2][0-7]{,2}|3[0-6][0-7]|37[0-7]?|[4-7][0-7]?|.)</string>
 							<key>name</key>
-							<string>constant.character.escape.coffee</string>
+							<string>constant.character.escape.livescript</string>
 						</dict>
 						<dict>
 							<key>include</key>
-							<string>#interpolated_coffee</string>
+							<string>#interpolated_livescript</string>
 						</dict>
 					</array>
 				</dict>
@@ -617,13 +733,13 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.comment.coffee</string>
+							<string>punctuation.definition.comment.livescript</string>
 						</dict>
 					</dict>
 					<key>match</key>
 					<string>(?&lt;!\\)(#).*$\n?</string>
 					<key>name</key>
-					<string>comment.line.number-sign.coffee</string>
+					<string>comment.line.number-sign.livescript</string>
 				</dict>
 			</array>
 		</dict>
@@ -634,51 +750,95 @@
 				<dict>
 					<key>match</key>
 					<string>(@)([a-zA-Z_\$]\w*)?</string>
-					<key>name</key>
-					<string>variable.other.readwrite.instance.coffee</string>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>variable.other.readwrite.instance.livescript</string>
+						</dict>
+					</dict>
 				</dict>
 			</array>
 		</dict>
-		<key>interpolated_coffee</key>
+		<key>interpolated_livescript</key>
 		<dict>
 			<key>patterns</key>
 			<array>
 				<dict>
-					<key>begin</key>
-					<string>\#\{</string>
 					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.section.embedded.livescript</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>source.embedded.livescript</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>(#)([a-zA-Z\-$_]+)</string>
+					<!--<string>(#)((?:{.*?}|\S[^\s,;)}\]\"\'\.\-]+))</string>-->
+				</dict>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.section.embedded.livescript</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>source.embedded.livescript</string>
+						</dict>
+					</dict>
+					<key>begin</key>
+					<string>#{</string>
+					<key>beginCaptures</key>
 					<dict>
 						<key>0</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.section.embedded.coffee</string>
+							<string>punctuation.section.embedded.livescript</string>
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>\}</string>
-					<key>name</key>
-					<string>source.coffee.embedded.source</string>
-					<key>patterns</key>
-					<array>
+					<string>}</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>0</key>
 						<dict>
-							<key>include</key>
-							<string>$self</string>
+							<key>name</key>
+							<string>punctuation.section.embedded.livescript</string>
 						</dict>
-					</array>
+					</dict>
+					<key>name</key>
+					<string>source.embedded.livescript</string>
 				</dict>
 			</array>
 		</dict>
 		<key>numeric</key>
 		<dict>
-			<key>patterns</key>
-			<array>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
 				<dict>
-					<key>match</key>
-					<string>(?&lt;!\$)\b((0([box])[0-9a-fA-F]+)|([0-9]+(\.[0-9]+)?(e[+\-]?[0-9]+)?))\b</string>
 					<key>name</key>
-					<string>constant.numeric.coffee</string>
+					<string>constant.numeric.livescript</string>
 				</dict>
-			</array>
+				<key>7</key>
+				<dict>
+					<key>name</key>
+					<string>comment.unit.livescript</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>(?&lt;!\$)\b((0([box])[0-9a-fA-F][0-9a-fA-F\_]*)|([0-9][0-9\_]*(\.[0-9\_]+)?(e[+\-]?[0-9\_]+)?))(\w*)\b</string>
 		</dict>
 		<key>single_quoted_string</key>
 		<dict>
@@ -692,7 +852,7 @@
 						<key>0</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.string.begin.coffee</string>
+							<string>punctuation.definition.string.begin.livescript</string>
 						</dict>
 					</dict>
 					<key>end</key>
@@ -702,18 +862,18 @@
 						<key>0</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.string.end.coffee</string>
+							<string>punctuation.definition.string.end.livescript</string>
 						</dict>
 					</dict>
 					<key>name</key>
-					<string>string.quoted.single.coffee</string>
+					<string>string.quoted.single.livescript</string>
 					<key>patterns</key>
 					<array>
 						<dict>
 							<key>match</key>
-							<string>\\(x\h{2}|[0-2][0-7]{,2}|3[0-6][0-7]?|37[0-7]?|[4-7][0-7]?|.)</string>
+							<string>\\(x\h{2}|u\d{4}|[0-2][0-7]{,2}|3[0-6][0-7]|37[0-7]?|[4-7][0-7]?|.)</string>
 							<key>name</key>
-							<string>constant.character.escape.coffee</string>
+							<string>constant.character.escape.livescript</string>
 						</dict>
 					</array>
 				</dict>
@@ -729,18 +889,46 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>variable.assignment.coffee</string>
+							<string>variable.assignment.livescript</string>
 						</dict>
 					</dict>
 					<key>match</key>
 					<string>([a-zA-Z\$_]\w*(\.\w+)*)</string>
 					<key>name</key>
-					<string>variable.assignment.coffee</string>
+					<string>variable.assignment.livescript</string>
 				</dict>
 			</array>
 		</dict>
+		<key>comments</key>
+		<dict>
+			<key>begin</key>
+			<string>/\*</string>
+			<key>captures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.comment.livescript</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>\*/</string>
+			<key>name</key>
+			<string>comment.block.livescript</string>
+			<!--
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>@\w*</string>
+					<key>name</key>
+					<string>storage.type.annotation.livescriptscript</string>
+				</dict>
+			</array>
+			-->
+		</dict>
 	</dict>
 	<key>scopeName</key>
-	<string>source.coffee</string>
+	<string>source.livescript</string>
 </dict>
 </plist>
