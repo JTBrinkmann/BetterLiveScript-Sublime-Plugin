@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>comment</key>
+	<string>Better LiveScript Syntax: version 1+verbose</string>
+	<key>fileTypes</key>
+	<array>
+		<string>ls</string>
+		<string>livescript</string>
+	</array>
+	<key>firstLineMatch</key>
+	<string>^#!.*\bls</string>
+	<key>foldingStartMarker</key>
+	<string>^\s*class\s+\S.*$|.*(?:!?(?:--?|~~?)&gt;|&lt;(?:--?|~~?)!?)\s*$|.*[\[{]\s*$</string>
+	<key>foldingStopMarker</key>
+	<string>^\s*$|^\s*[}\]]\s*$</string>
+	<key>keyEquivalent</key>
+	<string>+^~L</string>
+	<key>name</key>
+	<string>LiveScript (verbose)</string>
+	<key>patterns</key>
+	<array>
+		<dict> <!-- WARNING ON DASHES IN VARIABLE NAMES -->
+			<key>match</key>
+			<string>[a-zA-Z\$_]\w*\-[a-zA-Z\$_]+</string>
+			<key>name</key>
+			<string>invalid.warn.dash-in-name.livescript</string>
+		</dict>
+		<dict> <!-- WARNING ON THREE DOTS ... (to easily find your ToDos) -->
+			<key>match</key>
+			<string>^\s*\.\.\.[^\n]*</string>
+			<key>name</key>
+			<string>invalid.warn.not-yet-implemented.livescript</string>
+		</dict>
+		<dict>
+			<key>include</key>
+			<string>source.livescript</string>
+		</dict>
+	</dict>
+	<key>scopeName</key>
+	<string>source.livescript_verbose</string>
+</dict>
+</plist>
